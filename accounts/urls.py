@@ -20,5 +20,7 @@ import accounts.views as views
 
 urlpatterns = [
     path('login/', views.login_page, name='login'),
+    path('logout/', views.logout_page, name='logout'),
     path('register/', views.register_page, name='register'),
+    path('verify-account/<str:token>', views.verify_email_token, name='verify')
 ]
