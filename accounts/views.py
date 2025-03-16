@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import accounts.models as models
 from django.contrib import messages
 from django.db.models import Q
-from .utils import generate_random_token
+from .utils import generate_random_token, send_verification_mail
 
 # Create your views here.
 def login_page(r):
@@ -25,6 +25,7 @@ def register_page(r):
                                                  email_token=generate_random_token(), username=phone_number)
             hotel_user.set_password(pass1)
             hotel_user.save()
+            send_verification_mail(email, hotel_user.email_token)
             messages.success(r, "Account created successfully.")
             return redirect(login_page)
     return render(r, "register.html")
