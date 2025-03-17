@@ -26,7 +26,7 @@ def login_page(r):
             return redirect('/')
         messages.error(r, 'Login Failed!')
         return redirect(login_page)
-    return render(r, "login.html")
+    return render(r, "user/login.html")
 
 def register_page(r):
     if r.method == 'POST':
@@ -48,7 +48,7 @@ def register_page(r):
             send_verification_mail(email, hotel_user.email_token)
             messages.success(r, "Account created successfully.")
             return redirect(login_page)
-    return render(r, "register.html")
+    return render(r, "user/register.html")
 
 def verify_email_token(r, token):
     try:
@@ -86,4 +86,4 @@ def verify_otp(r, email):
             return redirect('/')
         messages.warning(r, 'Wrong OTP!')
         return redirect(f'/accounts/{email}/verify-otp')
-    return render(r, 'verify_otp.html')
+    return render(r, 'user/verify_otp.html')
