@@ -3,8 +3,9 @@ import accounts.models as models
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
-from .utils import generate_random_token, send_verification_mail
+from .utils import generate_random_token, send_verification_mail, send_verification_otp
 from django.contrib.auth import authenticate, login, logout
+import random
 
 # Create your views here.
 def login_page(r):
@@ -63,3 +64,26 @@ def logout_page(r):
     logout(r)
     messages.success(r, 'Logout Successful!')
     return redirect('/')
+
+def send_otp(r, email):
+    user_obj = models.HotelUser.objects.filter(email=email).exists()
+    if not user_obj:
+        messages.error(r, 'User Does not exist')
+        redirect(register_page)
+    otp = random.randint(100000, 999999)
+    send_verification_otp(email, otp)
+    r.session['otp'] = otp
+    return redirect(f'/accounts/{email}/verify-otp')
+
+def verify_otp(r, email):
+    if r.method == 'POST':
+        otp = r.POST.get('otp')
+        user_obj = models.HotelUser.objects.get(email=email)
+        if int(otp) == r.session.get('otp'):
+            messages.success(r, 'OTP Verified! Login Successful!')
+            login(r, user_obj)
+            r.session.pop('otp', None)
+            return redirect('/')
+        messages.warning(r, 'Wrong OTP!')
+        return redirect(f'/accounts/{email}/verify-otp')
+    return render(r, 'verify_otp.html')
