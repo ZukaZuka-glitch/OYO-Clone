@@ -73,12 +73,16 @@ def send_otp(r, email):
     otp = random.randint(100000, 999999)
     send_verification_otp(email, otp)
     r.session['otp'] = otp
+    r.session.set_expiry(180)
     return redirect(f'/accounts/{email}/verify-otp')
 
 def verify_otp(r, email):
     if r.method == 'POST':
         otp = r.POST.get('otp')
         user_obj = models.HotelUser.objects.get(email=email)
+        if 'otp' not in r.session:
+            messages.error(r, 'OTP Expired!')
+            return redirect(f'/resend-otp/{email}')
         if int(otp) == r.session.get('otp'):
             messages.success(r, 'OTP Verified! Login Successful!')
             login(r, user_obj)
@@ -87,3 +91,14 @@ def verify_otp(r, email):
         messages.warning(r, 'Wrong OTP!')
         return redirect(f'/accounts/{email}/verify-otp')
     return render(r, 'user/verify_otp.html')
+
+def resend_otp(r, email):
+    if not models.HotelUser.objects.filter(email=email).exists():
+        messages.error(r, 'Invalid User')
+        return redirect(register_page)
+    otp = random.randint(100000, 999999)
+    send_verification_otp(email, otp)
+    r.session['otp'] = otp
+    r.session.set_expiry(180)
+    messages.success(r, 'OTP Resent to your email!')
+    return redirect(f'/accounts/{email}/verify-otp')

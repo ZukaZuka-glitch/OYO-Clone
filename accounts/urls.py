@@ -24,5 +24,6 @@ urlpatterns = [
     path('user-register/', views.register_page, name='register'),
     path('verify-account/<str:token>', views.verify_email_token, name='verify'),
     path('send-otp/<str:email>/', views.send_otp, name='send_otp'),
-    path('<str:email>/verify-otp', views.verify_otp, name='send_otp')
+    path('<str:email>/verify-otp', views.verify_otp, name='send_otp'),
+    path('resend-otp/<str:email>', views.resend_otp, name='send_otp')
 ]
