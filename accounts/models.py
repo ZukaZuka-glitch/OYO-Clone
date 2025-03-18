@@ -6,7 +6,6 @@ class HotelUser(User):
     profile_picture = models.ImageField(upload_to="profile_pictures", null=True, blank=True)
     phone_number = models.CharField(max_length=10, unique=True)
     email_token = models.CharField(max_length=100, null=True, blank=True)
-    otp = models.CharField(max_length=10, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
 
     class Meta:
@@ -18,7 +17,6 @@ class HotelVendor(User):
     business_name = models.CharField(max_length=100)
     profile_picture = models.ImageField(upload_to="profile_pictures", null=True, blank=True)
     email_token = models.CharField(max_length=100, null=True, blank=True)
-    otp = models.CharField(max_length=10, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
 
     class Meta:
