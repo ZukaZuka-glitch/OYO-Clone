@@ -20,9 +20,12 @@ import accounts.views as views
 
 urlpatterns = [
     path('user-login/', views.user_login_page, name='user-login'),
+    path('vendor-login/', views.vendor_login_page, name='vendor-login'),
     path('logout/', views.logout_page, name='logout'),
     path('user-register/', views.user_register_page, name='user-register'),
-    path('verify-account/<str:token>', views.verify_email_token, name='verify'),
+    path('vendor-register/', views.vendor_register_page, name='vendor-register'),
+    path('verify-account/<str:token>', views.verify_user_email_token, name='verify'),
+    path('vendor/verify-account/<str:token>', views.verify_vendor_email_token, name='verify'),
     path('send-otp/<str:email>/', views.send_otp, name='send_otp'),
     path('<str:email>/verify-otp', views.verify_otp, name='send_otp'),
     path('resend-otp/<str:email>', views.resend_otp, name='send_otp')

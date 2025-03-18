@@ -3,7 +3,7 @@ import accounts.models as models
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
-from .utils import generate_random_token, send_verification_mail, send_verification_otp
+from .utils import generate_random_token, send_user_verification_mail, send_verification_otp, send_vendor_verification_mail
 from django.contrib.auth import authenticate, login, logout
 import random
 
@@ -45,14 +45,24 @@ def user_register_page(r):
                                                  email_token=generate_random_token(), username=phone_number)
             hotel_user.set_password(pass1)
             hotel_user.save()
-            send_verification_mail(email, hotel_user.email_token)
+            send_user_verification_mail(email, hotel_user.email_token)
             messages.success(r, "Account created successfully.")
             return redirect(user_login_page)
     return render(r, "user/register.html")
 
-def verify_email_token(r, token):
+def verify_user_email_token(r, token):
     try:
         hotel_user = models.HotelUser.objects.get(email_token=token)
+        hotel_user.is_verified = True
+        hotel_user.save()
+        messages.success(r, 'Account Verified Successfully!')
+        return redirect(user_login_page)
+    except models.HotelUser.DoesNotExist:
+        return HttpResponse('<h2>Invalid token.</h2>')
+
+def verify_vendor_email_token(r, token):
+    try:
+        hotel_user = models.HotelVendor.objects.get(email_token=token)
         hotel_user.is_verified = True
         hotel_user.save()
         messages.success(r, 'Account Verified Successfully!')
@@ -102,3 +112,45 @@ def resend_otp(r, email):
     r.session.set_expiry(180)
     messages.success(r, 'OTP Resent to your email!')
     return redirect(f'/accounts/{email}/verify-otp')
+
+def vendor_login_page(r):
+    if r.method == 'POST':
+        email = r.POST.get('email')
+        password = r.POST.get('password')
+        user_obj = models.HotelVendor.objects.filter(email=email)
+        if not user_obj.exists():
+            messages.error(r, 'Vendor not registered!')
+            return redirect(vendor_register_page)
+        if not user_obj[0].is_verified:
+            messages.warning(r, 'Vendor not verified!')
+            return redirect(vendor_login_page)
+        hotel_vendor = authenticate(username=user_obj[0].username ,password=password)
+        if hotel_vendor:
+            login(r, hotel_vendor)
+            messages.success(r, 'Vendor Login Successful!')
+            return redirect('/')
+    return render(r, 'vendor/login.html')
+
+def vendor_register_page(r):
+    if r.method == 'POST':
+        phone_number = r.POST.get('phone_number')
+        email = r.POST.get('email')
+        if models.HotelVendor.objects.filter(Q(phone_number=phone_number) | Q(email=email)).exists():
+            messages.error(r, 'Vendor already registered!')
+            return redirect(vendor_login_page)
+        pass1 = r.POST.get('password1')
+        pass2 = r.POST.get('password2')
+        if pass1 != pass2:
+            messages.error(r, 'Passwords don\'t match!')
+            return redirect(vendor_login_page)
+        first_name = r.POST.get('first_name')
+        last_name = r.POST.get('last_name')
+        business_name = r.POST.get('business_name')
+        hotel_vendor = models.HotelVendor.objects.create(username=phone_number, first_name=first_name,
+                                                         last_name=last_name, email = email,
+                                                          business_name = business_name, email_token=generate_random_token())
+        hotel_vendor.set_password(pass1)
+        hotel_vendor.save()
+        send_vendor_verification_mail(email, hotel_vendor.email_token)
+        return redirect(vendor_login_page)
+    return render(r, 'vendor/register.html')
