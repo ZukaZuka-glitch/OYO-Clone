@@ -19,9 +19,9 @@ from django.urls import path
 import accounts.views as views
 
 urlpatterns = [
-    path('user-login/', views.login_page, name='login'),
+    path('user-login/', views.user_login_page, name='user-login'),
     path('logout/', views.logout_page, name='logout'),
-    path('user-register/', views.register_page, name='register'),
+    path('user-register/', views.user_register_page, name='user-register'),
     path('verify-account/<str:token>', views.verify_email_token, name='verify'),
     path('send-otp/<str:email>/', views.send_otp, name='send_otp'),
     path('<str:email>/verify-otp', views.verify_otp, name='send_otp'),

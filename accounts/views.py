@@ -8,27 +8,27 @@ from django.contrib.auth import authenticate, login, logout
 import random
 
 # Create your views here.
-def login_page(r):
+def user_login_page(r):
     if r.method == 'POST':
         email = r.POST.get('email')
         password = r.POST.get('password')
         user_obj = models.HotelUser.objects.filter(email=email)
         if not user_obj.exists():
             messages.error(r, 'No Account Found!')
-            return redirect(login_page)
+            return redirect(user_login_page)
         if not user_obj[0].is_verified:
             messages.error(r, 'Account Not Verified!')
-            return redirect(login_page)
+            return redirect(user_login_page)
         hotel_user = authenticate(username=user_obj[0].username,password=password)
         if hotel_user:
             login(r, hotel_user)
             messages.success(r, 'Login Successful!')
             return redirect('/')
         messages.error(r, 'Login Failed!')
-        return redirect(login_page)
+        return redirect(user_login_page)
     return render(r, "user/login.html")
 
-def register_page(r):
+def user_register_page(r):
     if r.method == 'POST':
         first_name = r.POST.get('first_name')
         last_name = r.POST.get('last_name')
@@ -38,7 +38,7 @@ def register_page(r):
         pass2 = r.POST.get('password2')
         if models.HotelUser.objects.filter(Q(email=email) | Q(phone_number=phone_number)).exists():
             messages.error(r, "Account exists with email or phone number.")
-            return redirect(login_page)
+            return redirect(user_login_page)
         if pass1 == pass2:
             hotel_user = models.HotelUser.objects.create(first_name=first_name, last_name=last_name,
                                                  email=email, phone_number=phone_number,
@@ -47,7 +47,7 @@ def register_page(r):
             hotel_user.save()
             send_verification_mail(email, hotel_user.email_token)
             messages.success(r, "Account created successfully.")
-            return redirect(login_page)
+            return redirect(user_login_page)
     return render(r, "user/register.html")
 
 def verify_email_token(r, token):
@@ -56,7 +56,7 @@ def verify_email_token(r, token):
         hotel_user.is_verified = True
         hotel_user.save()
         messages.success(r, 'Account Verified Successfully!')
-        return redirect(login_page)
+        return redirect(user_login_page)
     except models.HotelUser.DoesNotExist:
         return HttpResponse('<h2>Invalid token.</h2>')
 
@@ -69,7 +69,7 @@ def send_otp(r, email):
     user_obj = models.HotelUser.objects.filter(email=email).exists()
     if not user_obj:
         messages.error(r, 'User Does not exist')
-        redirect(register_page)
+        redirect(user_register_page)
     otp = random.randint(100000, 999999)
     send_verification_otp(email, otp)
     r.session['otp'] = otp
@@ -95,7 +95,7 @@ def verify_otp(r, email):
 def resend_otp(r, email):
     if not models.HotelUser.objects.filter(email=email).exists():
         messages.error(r, 'Invalid User')
-        return redirect(register_page)
+        return redirect(user_register_page)
     otp = random.randint(100000, 999999)
     send_verification_otp(email, otp)
     r.session['otp'] = otp
