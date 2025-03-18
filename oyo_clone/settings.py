@@ -133,4 +133,4 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "anubhavsharma5645@gmail.com"
-EMAIL_HOST_PASSWORD = "feld unhf zezu moue"
+EMAIL_HOST_PASSWORD = "jyfn ntkm caql mqcr"
