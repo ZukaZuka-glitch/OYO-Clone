@@ -30,4 +30,5 @@ urlpatterns = [
     path('<str:email>/verify-otp', views.verify_otp, name='verify_otp'),
     path('resend-otp/<str:email>', views.resend_otp, name='resend_otp'),
     path('vendor/dashboard', views.dashboard, name='dashboard'),
+    path('add-hotel', views.add_hotel, name='add_hotel'),
 ]
