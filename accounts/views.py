@@ -5,7 +5,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from .utils import generate_random_token, send_user_verification_mail, send_verification_otp, send_vendor_verification_mail
 from django.contrib.auth import authenticate, login, logout
-import random
+from random import randint
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def user_login_page(r):
@@ -80,7 +81,7 @@ def send_otp(r, email):
     if not user_obj:
         messages.error(r, 'User Does not exist')
         redirect(user_register_page)
-    otp = random.randint(100000, 999999)
+    otp = randint(100000, 999999)
     send_verification_otp(email, otp)
     r.session['otp'] = otp
     r.session.set_expiry(180)
@@ -106,7 +107,7 @@ def resend_otp(r, email):
     if not models.HotelUser.objects.filter(email=email).exists():
         messages.error(r, 'Invalid User')
         return redirect(user_register_page)
-    otp = random.randint(100000, 999999)
+    otp = randint(100000, 999999)
     send_verification_otp(email, otp)
     r.session['otp'] = otp
     r.session.set_expiry(180)
@@ -116,8 +117,8 @@ def resend_otp(r, email):
 def vendor_login_page(r):
     if r.method == 'POST':
         email = r.POST.get('email')
-        password = r.POST.get('password')
         user_obj = models.HotelVendor.objects.filter(email=email)
+        password = r.POST.get('password')
         if not user_obj.exists():
             messages.error(r, 'Vendor not registered!')
             return redirect(vendor_register_page)
@@ -128,7 +129,7 @@ def vendor_login_page(r):
         if hotel_vendor:
             login(r, hotel_vendor)
             messages.success(r, 'Vendor Login Successful!')
-            return redirect('/')
+            return redirect(dashboard)
     return render(r, 'vendor/login.html')
 
 def vendor_register_page(r):
@@ -147,10 +148,14 @@ def vendor_register_page(r):
         last_name = r.POST.get('last_name')
         business_name = r.POST.get('business_name')
         hotel_vendor = models.HotelVendor.objects.create(username=phone_number, first_name=first_name,
-                                                         last_name=last_name, email = email,
+                                                         last_name=last_name, email = email, phone_number = phone_number,
                                                           business_name = business_name, email_token=generate_random_token())
         hotel_vendor.set_password(pass1)
         hotel_vendor.save()
         send_vendor_verification_mail(email, hotel_vendor.email_token)
         return redirect(vendor_login_page)
     return render(r, 'vendor/register.html')
+
+@login_required(login_url='vendor-login')
+def dashboard(r):
+    return render(r, 'vendor/dashboard.html')
