@@ -24,9 +24,10 @@ urlpatterns = [
     path('logout/', views.logout_page, name='logout'),
     path('user-register/', views.user_register_page, name='user-register'),
     path('vendor-register/', views.vendor_register_page, name='vendor-register'),
-    path('verify-account/<str:token>', views.verify_user_email_token, name='verify'),
-    path('vendor/verify-account/<str:token>', views.verify_vendor_email_token, name='verify'),
+    path('verify-account/<str:token>', views.verify_user_email_token, name='user-verify'),
+    path('vendor/verify-account/<str:token>', views.verify_vendor_email_token, name='vendor-verify'),
     path('send-otp/<str:email>/', views.send_otp, name='send_otp'),
-    path('<str:email>/verify-otp', views.verify_otp, name='send_otp'),
-    path('resend-otp/<str:email>', views.resend_otp, name='send_otp')
+    path('<str:email>/verify-otp', views.verify_otp, name='verify_otp'),
+    path('resend-otp/<str:email>', views.resend_otp, name='resend_otp'),
+    path('vendor/dashboard', views.dashboard, name='dashboard'),
 ]
