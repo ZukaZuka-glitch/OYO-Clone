@@ -3,7 +3,7 @@ import accounts.models as models
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
-import utils
+import accounts.utils as utils
 from django.contrib.auth import authenticate, login, logout
 from random import randint
 from django.contrib.auth.decorators import login_required

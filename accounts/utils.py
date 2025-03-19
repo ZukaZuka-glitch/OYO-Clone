@@ -2,7 +2,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.text import slugify
-from models import Hotel
+from .models import Hotel
 
 def generate_random_token(): return str(uuid4())
 
