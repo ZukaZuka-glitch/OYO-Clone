@@ -15,9 +15,24 @@
   <label for="floatingTextarea2">Hotel Description</label>
 </div>
         </div>
+    <div class="mb-3">
+    <label for="Amenities" class="form-label fw-bold">Amenities</label>
+    <div class="row g-3">
+        {% for amenity in amenities %}
+        <div class="col-md-4 col-sm-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="amenities" value="{{ amenity.id }}" id="amenity{{ amenity.id }}">
+                <label class="form-check-label" for="amenity{{ amenity.id }}">
+                    {{ amenity.name }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
         <div class="mb-3">
     <label for="InputEmail" class="form-label">Hotel Price</label>
-    <input type="number" class="form-control" name="email" id="InputEmail" aria-describedby="emailHelp">
+    <input type="number" class="form-control" name="hotel_price" id="InputEmail" aria-describedby="emailHelp">
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Offer Price</label>
