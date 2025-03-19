@@ -8,6 +8,9 @@ from django.contrib.auth import authenticate, login, logout
 from random import randint
 from django.contrib.auth.decorators import login_required
 
+from accounts.models import Amenities
+
+
 # Create your views here.
 def user_login_page(r):
     if r.method == 'POST':
@@ -165,14 +168,18 @@ def add_hotel(r):
     if r.method == 'POST':
         hotel_name = r.POST.get('hotel_name')
         description = r.POST.get('description')
-        amenities = r.POST.get('amenities')
+        amenities = r.POST.getlist('amenities')
         price = r.POST.get('hotel_price')
         offer_price = r.POST.get('offer_price')
         location = r.POST.get('location')
         slug = utils.generate_slug(hotel_name)
         hotel_obj = models.Hotel.objects.create(name=hotel_name, description=description, hotel_price=price,
-                                    hotel_offer_price=offer_price, hotel_location=location, hotel_slug=slug)
+                                    hotel_offer_price=offer_price, hotel_location=location, hotel_slug=slug,
+                                                hotel_owner=models.HotelVendor.objects.get(id=r.user.id))
+        for amenity in amenities:
+            feature = models.Amenities.objects.get(id=amenity)
+            hotel_obj.amenities.add(feature)
         hotel_obj.save()
         messages.success(r, 'Hotel Added Successfully!')
         return redirect(dashboard)
-    return render(r, 'vendor/add_hotel.html')
+    return render(r, 'vendor/add_hotel.html', context={'amenities': Amenities.objects.all()})

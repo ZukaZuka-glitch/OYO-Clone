@@ -39,7 +39,7 @@ class Hotel(models.Model):
     hotel_price = models.FloatField()
     hotel_offer_price = models.FloatField()
     hotel_location = models.TextField()
-    is_active = models.BooleanField(default=True)   
+    is_active = models.BooleanField(default=True)
 
     def __str__(self): return self.name
 
