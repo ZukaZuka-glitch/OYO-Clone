@@ -27,6 +27,8 @@ class Amenities(models.Model):
     name = models.CharField(max_length=100)
     icon = models.ImageField(upload_to="icons", null=True, blank=True)
 
+    def __str__(self): return self.name
+
 
 class Hotel(models.Model):
     name = models.CharField(max_length=100)
