@@ -1,8 +1,31 @@
 {% extends "utils/vendor_base.html" %}
 {% block start %}
-    <div class="container mt-5">
-    <div class="mx-auto col-6">
-        <a href="{% url 'add_hotel' %}" class="btn btn-success">Add Hotels</a>
-    </div>
-    </div>
+<!-- Center the Add Hotels button -->
+<div class="container mt-5 text-center">
+  <a href="{% url 'add_hotel' %}" class="btn btn-success">Add Hotels</a>
+</div>
+
+<!-- Use another container/row to keep cards "inside" the page -->
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for hotel in hotels %}
+      <!-- Give each card its own column so they stay neatly aligned -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow h-100">
+          <img src="https://dubai-experience.de/wp-content/uploads/2019/05/atlantis-the-palm-dubai-pool-2-1.jpg"
+               class="card-img-top" alt="Atlantis">
+          <div class="card-body">
+            <h5 class="card-title">{{ hotel.name }}</h5>
+            <p class="card-text">{{ hotel.description }}</p>
+            {% for amenity in hotel.amenities.all %}
+              <span class="badge text-bg-primary">{{ amenity.name }}</span>
+            {% endfor %}
+          </div>
+        <a href="#" class="btn btn-success">Image</a>
+        <a href="#" class="btn btn-warning">Edit</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

@@ -161,7 +161,7 @@ def vendor_register_page(r):
 
 @login_required(login_url='vendor-login')
 def dashboard(r):
-    return render(r, 'vendor/dashboard.html')
+    return render(r, 'vendor/dashboard.html', context={'hotels': models.Hotel.objects.filter(hotel_owner=r.user)})
 
 @login_required(login_url='vendor-login')
 def add_hotel(r):
