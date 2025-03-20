@@ -192,3 +192,10 @@ def upload_hotel_images(r, slug):
         models.HotelImages.objects.create(hotel_owner=hotel_obj, image=image_name)
         return HttpResponseRedirect(r.path_info)
     return render(r, 'vendor/upload_images.html', context={'images': models.HotelImages.objects.filter(hotel_owner=hotel_obj)})
+
+@login_required(login_url='vendor-login')
+def delete_hotel_image(r, image_id):
+    hotel_image = models.HotelImages.objects.get(id=image_id)
+    hotel_image.delete()
+    messages.success(r, 'Hotel Image Deleted Successfully!')
+    return redirect(upload_hotel_images, slug=hotel_image.hotel_owner.hotel_slug)
