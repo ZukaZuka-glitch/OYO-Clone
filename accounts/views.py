@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import accounts.models as models
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import accounts.utils as utils
 from django.contrib.auth import authenticate, login, logout
 from random import randint
@@ -183,3 +183,12 @@ def add_hotel(r):
         messages.success(r, 'Hotel Added Successfully!')
         return redirect(dashboard)
     return render(r, 'vendor/add_hotel.html', context={'amenities': Amenities.objects.all()})
+
+@login_required(login_url='vendor-login')
+def upload_hotel_images(r, slug):
+    hotel_obj = models.Hotel.objects.get(hotel_slug=slug)
+    if r.method == 'POST':
+        image_name = r.FILES['image']
+        models.HotelImages.objects.create(hotel_owner=hotel_obj, image=image_name)
+        return HttpResponseRedirect(r.path_info)
+    return render(r, 'vendor/upload_images.html', context={'images': models.HotelImages.objects.filter(hotel_owner=hotel_obj)})
