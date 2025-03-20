@@ -5,6 +5,7 @@
         {% for image in images %}
         <div class="col-2">
             <img src="{{ image.image.url }}" alt="Hotel Image" style="height: 150px">
+            <a href="{% url 'delete_hotel_image' image.id %}" class="btn btn-danger">Delete</a>
         </div>
         {% endfor %}
     </div>
