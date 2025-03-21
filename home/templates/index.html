@@ -2,54 +2,25 @@
 {% block start %}
     <div class="container mt-5 pt-5 pb-5">
         <div class="row">
-            <div class="col-md-3">
+            {% for hotel in hotels %}
+            <div class="col-md-3 mt-3">
                 <div class="card shadow" style="width: 18rem;">
-                <img src="https://dubai-experience.de/wp-content/uploads/2019/05/atlantis-the-palm-dubai-pool-2-1.jpg" class="card-img-top" alt="Atlantis">
+                {% if hotel.images.first %}
+                <img src="{{ hotel.images.first.image.url }}" class="card-img-top" alt="Atlantis">
+                {% else %}
+                <img src="https://media.istockphoto.com/vectors/no-image-available-sign-vector-id1138179183?k=6&m=1138179183&s=612x612&w=0&h=prMYPP9mLRNpTp3XIykjeJJ8oCZRhb2iez6vKs8a8eE=" class="card-img-top" alt="Atlantis">
+                {% endif %}
   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <span class="badge text-bg-primary">Swimming Pool</span>
-      <span class="badge text-bg-primary">Casino</span>
-      <span class="badge text-bg-primary">Bar</span>
+    <h5 class="card-title">{{ hotel.name}}</h5><hr>
+    <p class="card-text">₹<s>{{ hotel.hotel_price }}</s> ₹{{ hotel.hotel_offer_price }}</p><hr>
+    <p class="card-text">{{ hotel.hotel_location }}</p>
+      {% for amenity in hotel.amenities.all %}
+      <span class="badge text-bg-primary">{{ amenity.name }}</span>
+          {% endfor %}
   </div>
 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card shadow" style="width: 18rem;">
-                <img src="https://images.freekaamaal.com/post_images/1602585380.jpg" class="card-img-top" alt="Oberoi Amarvilas">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <span class="badge text-bg-primary">Swimming Pool</span>
-      <span class="badge text-bg-primary">Casino</span>
-      <span class="badge text-bg-primary">Bar</span>
-  </div>
-</div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow" style="width: 18rem;">
-                <img src="https://www.indianholiday.uk/blog/wp-content/uploads/2014/01/hotel-Claridges-New-Delhi.jpg" class="card-img-top" alt="Claridges">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <span class="badge text-bg-primary">Swimming Pool</span>
-      <span class="badge text-bg-primary">Casino</span>
-      <span class="badge text-bg-primary">Bar</span>
-  </div>
-</div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow" style="width: 18rem;">
-                <img src="https://i.pinimg.com/originals/a1/6c/60/a16c603829b603f316c0b666c5ee1a75.jpg" class="card-img-top" alt="Taj Hotel ">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <span class="badge text-bg-primary">Swimming Pool</span>
-      <span class="badge text-bg-primary">Casino</span>
-      <span class="badge text-bg-primary">Bar</span>
-  </div>
-</div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
