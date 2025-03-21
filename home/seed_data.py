@@ -1,8 +1,8 @@
 from accounts.models import Amenities, HotelVendor, Hotel
 from faker import Faker
 from random import choice
-fake = Faker()
 import random
+fake = Faker(locale='en_IN')
 
 def create_user(num):
     for i in range(num):
@@ -20,13 +20,14 @@ def create_hotel(num):
     for i in range(num):
         hotel_vendor = choice(HotelVendor.objects.all())
         amenities = list(Amenities.objects.all())
+        hotel_price = random.randint(1000, 25000)
         hotel = Hotel.objects.create(
             name=fake.company(),
             description=fake.text(),
             hotel_slug=fake.unique.slug(),
             hotel_owner=hotel_vendor,
-            hotel_price=fake.random_number(digits=4) / 100.0,
-            hotel_offer_price=fake.random_number(digits=4) / 100.0,
+            hotel_price=hotel_price,
+            hotel_offer_price=random.randint(10000, 25000),
             hotel_location=fake.address(),
             is_active=fake.boolean()
         )
