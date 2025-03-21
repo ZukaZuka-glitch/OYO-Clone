@@ -19,10 +19,17 @@
           <a class="nav-link" href="{% url 'user-register' %}">Register</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
-      </form>
+        <form class="d-flex" role="search">
+    <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-light" type="submit">Search</button>
+
+    <select name="sort" class="form-select ms-2">
+        <option value="" disabled selected>Sort by</option>
+        <option value="sort_low">Low to High</option>
+        <option value="sort_high">High to Low</option>
+    </select>
+</form>
+
     </div>
   </div>
 </nav>
