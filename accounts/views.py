@@ -199,3 +199,20 @@ def delete_hotel_image(r, image_id):
     hotel_image.delete()
     messages.success(r, 'Hotel Image Deleted Successfully!')
     return redirect(upload_hotel_images, slug=hotel_image.hotel_owner.hotel_slug)
+
+@login_required(login_url='vendor-login')
+def edit_hotel_details(r, slug):
+    hotel_obj = models.Hotel.objects.get(hotel_slug=slug)
+    if hotel_obj.hotel_owner.id != r.user.id:
+        messages.warning(r, 'You are not authorized to edit this hotel!')
+        return redirect(dashboard)
+    if r.method == 'POST':
+        hotel_obj.name = r.POST.get('hotel_name')
+        hotel_obj.description = r.POST.get('description')
+        hotel_obj.hotel_price = r.POST.get('hotel_price')
+        hotel_obj.hotel_offer_price = r.POST.get('offer_price')
+        hotel_obj.hotel_location = r.POST.get('location')
+        hotel_obj.save()
+        messages.success(r, 'Hotel Details Updated Successfully!')
+        return HttpResponseRedirect(r.path_info)
+    return render(r, 'vendor/edit_hotel.html', context={'hotel': hotel_obj, 'amenities': models.Amenities.objects.all()})
