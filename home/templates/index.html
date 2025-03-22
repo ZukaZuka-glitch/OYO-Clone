@@ -5,6 +5,7 @@
             {% for hotel in hotels %}
             <div class="col-md-3 mt-3">
                 <div class="card shadow" style="width: 18rem;">
+                <a href="{% url 'hotel_details' hotel.hotel_slug %}">
                 {% if hotel.images.first %}
                 <img src="{{ hotel.images.first.image.url }}" class="card-img-top" alt="Atlantis">
                 {% else %}
@@ -17,7 +18,7 @@
       {% for amenity in hotel.amenities.all %}
       <span class="badge text-bg-primary">{{ amenity.name }}</span>
           {% endfor %}
-  </div>
+  </div></a>
 </div>
             </div>
             {% endfor %}
