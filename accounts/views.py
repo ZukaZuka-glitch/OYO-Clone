@@ -8,8 +8,6 @@ from django.contrib.auth import authenticate, login, logout
 from random import randint
 from django.contrib.auth.decorators import login_required
 
-from accounts.models import Amenities
-
 
 # Create your views here.
 def user_login_page(r):
@@ -182,7 +180,7 @@ def add_hotel(r):
         hotel_obj.save()
         messages.success(r, 'Hotel Added Successfully!')
         return redirect(dashboard)
-    return render(r, 'vendor/add_hotel.html', context={'amenities': Amenities.objects.all()})
+    return render(r, 'vendor/add_hotel.html', context={'amenities': models.Amenities.objects.all()})
 
 @login_required(login_url='vendor-login')
 def upload_hotel_images(r, slug):

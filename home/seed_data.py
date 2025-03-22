@@ -27,7 +27,7 @@ def create_hotel(num):
             hotel_slug=fake.unique.slug(),
             hotel_owner=hotel_vendor,
             hotel_price=hotel_price,
-            hotel_offer_price=random.randint(10000, 25000),
+            hotel_offer_price=random.randint(1000, hotel_price),
             hotel_location=fake.address(),
             is_active=fake.boolean()
         )
