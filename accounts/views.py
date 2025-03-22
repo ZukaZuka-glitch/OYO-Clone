@@ -199,7 +199,7 @@ def delete_hotel_image(r, image_id):
     return redirect(upload_hotel_images, slug=hotel_image.hotel_owner.hotel_slug)
 
 @login_required(login_url='vendor-login')
-def edit_hotel_details(r, slug):
+def edit_hotel_details(r, slug)
     hotel_obj = models.Hotel.objects.get(hotel_slug=slug)
     if hotel_obj.hotel_owner.id != r.user.id:
         messages.warning(r, 'You are not authorized to edit this hotel!')
