@@ -19,7 +19,7 @@ def detail_hotel(r, slug):
         days_count = (datetime.strptime(r.POST.get('check_out'), "%Y-%m-%d") - datetime.strptime(r.POST.get('check_in'), "%Y-%m-%d")).days
         if days_count <= 0:
             messages.error(r, 'Invalid Booking Date!')
-            return redirect(detail_hotel, slug)
+            return redirect(detail_hotel)
         HotelBooking.objects.create(hotel=hotel, user=HotelUser.objects.get(id=r.user.id),
                                     booking_start_date=r.POST.get('check_in'), booking_end_date=r.POST.get('check_out'),
                                     booking_price=hotel.hotel_offer_price * days_count)
