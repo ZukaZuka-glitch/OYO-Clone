@@ -214,3 +214,10 @@ def edit_hotel_details(r, slug):
         messages.success(r, 'Hotel Details Updated Successfully!')
         return HttpResponseRedirect(r.path_info)
     return render(r, 'vendor/edit_hotel.html', context={'hotel': hotel_obj, 'amenities': models.Amenities.objects.all()})
+
+def check_bookings(r, slug):
+    hotel_obj = models.Hotel.objects.get(hotel_slug=slug)
+    if hotel_obj.hotel_owner_id != r.user.id:
+        messages.warning(r, 'You are not authorized to view this page!')
+        return redirect(dashboard)
+    return render(r, 'vendor/check_booking.html', context={'hotel': hotel_obj})

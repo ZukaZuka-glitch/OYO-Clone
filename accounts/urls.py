@@ -34,5 +34,5 @@ urlpatterns = [
     path('<str:slug>/upload-images/', views.upload_hotel_images, name='upload_hotel_images'),
     path('delete-image/<int:image_id>/', views.delete_hotel_image, name='delete_hotel_image'),
     path('edit-hotel/<str:slug>/', views.edit_hotel_details, name='edit_hotel'),
-    path('check-bookings/<str:slug>/', views.check_booking, name='check_bookings'),
+    path('check-bookings/<str:slug>/', views.check_bookings, name='check_bookings'),
 ]
