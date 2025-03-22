@@ -16,7 +16,23 @@
         </div>
     {% endfor %}
 </div>
-<button class="btn btn-success mt-4">Book Now</button>
+{% if user.is_authenticated %}
+    <form method="POST" class="mt-3">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="checkIn" class="form-label">Check In Date</label>
+    <input type="date" name="check_in" class="form-control" id="checkIn" required>
+  </div>
+  <div class="mb-3">
+    <label for="checkOut" class="form-label">Check Out Date</label>
+    <input type="date" name="check_out" class="form-control" id="checkOut" required>
+  </div>
+  <button type="submit" class="btn btn-success mt-4">Book Now</button>
+</form>
+
+{% else %}
+<a class="btn btn-danger mt-4" href="{% url 'user-login' %}">Login</a>
+{% endif %}
   </div>
     </div>
 {% endblock %}
