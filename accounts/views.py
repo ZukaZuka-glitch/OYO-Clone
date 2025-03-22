@@ -220,4 +220,4 @@ def check_bookings(r, slug):
     if hotel_obj.hotel_owner_id != r.user.id:
         messages.warning(r, 'You are not authorized to view this page!')
         return redirect(dashboard)
-    return render(r, 'vendor/check_booking.html', context={'hotel': hotel_obj})
+    return render(r, 'vendor/check_booking.html', context={'bookings': hotel_obj.booked_hotel_name.all()})
