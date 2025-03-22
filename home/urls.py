@@ -19,5 +19,6 @@ from django.urls import path
 import home.views as views
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('detalis/hotel/<str:slug>', views.detail_hotel, name='hotel_details'),
 ]
