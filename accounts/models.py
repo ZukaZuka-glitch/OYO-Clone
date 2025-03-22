@@ -53,3 +53,10 @@ class HotelManager(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='managers')
     manager_name = models.CharField(max_length=100)
     manager_contact = models.CharField(max_length=10)
+
+class HotelBooking(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='booked_hotel_name')
+    user = models.ForeignKey(HotelUser, on_delete=models.CASCADE, related_name='booked_user_name')
+    booking_start_date = models.DateTimeField()
+    booking_end_date = models.DateTimeField()
+    booking_price = models.FloatField()
