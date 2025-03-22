@@ -18,7 +18,7 @@
             {% endfor %}
           </div>
           <div class="card-footer d-flex justify-content-between">
-            <a href="{% url 'check_bookings' hotel.hotel_slug %}" class="btn btn-info">Check Bookings</a>
+            <a href="{% url 'vendor_check_bookings' hotel.hotel_slug %}" class="btn btn-info">Check Bookings</a>
             <a href="{% url 'upload_hotel_images' hotel.hotel_slug %}" class="btn btn-success">Image</a>
             <a href="{% url 'edit_hotel' hotel.hotel_slug %}" class="btn btn-warning">Edit</a>
           </div>
