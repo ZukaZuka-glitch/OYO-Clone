@@ -221,3 +221,7 @@ def check_bookings(r, slug):
         messages.warning(r, 'You are not authorized to view this page!')
         return redirect(dashboard)
     return render(r, 'vendor/check_booking.html', context={'bookings': hotel_obj.booked_hotel_name.all()})
+
+def user_check_bookings(r):
+    bookings = models.HotelBooking.objects.filter(user=r.user)
+    return render(r, 'user/check_booking.html', context={'bookings': bookings})
