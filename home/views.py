@@ -1,4 +1,3 @@
-from django.core.checks.security.base import check_allowed_hosts
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from accounts.models import Hotel, HotelBooking, HotelUser
@@ -8,13 +7,13 @@ from django.views.decorators.cache import cache_page
 # Create your views here.
 @cache_page(60*2)
 def index(r):
-    hotels = Hotel.objects.all()
+    hotels = Hotel.objects.all().select_related('hotel_owner').prefetch_related('amenities')
     if r.GET.get('search'): hotels = hotels.filter(name__icontains=r.GET.get('search'))
     if r.GET.get('sort'):
         sort_by = r.GET.get('sort')
         if sort_by == 'sort_low': hotels = hotels.order_by('hotel_offer_price')
         else: hotels = hotels.order_by('-hotel_offer_price')
-    return render(r, "index.html", context={"hotels": hotels})
+    return render(r, "index.html", context={"hotels": hotels[:200]})
 
 def detail_hotel(r, slug):
     if r.method == 'POST':
